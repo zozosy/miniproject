@@ -1,7 +1,11 @@
 const express = require('express')  // We import the express application
 const cors = require('cors') // Necessary for localhost
+const { middleware } = require('./utils/middleware');
+const morgan = require('morgan');
 const app = express() // Creates an express application in app
 
+middleware(app);
+app.use(morgan ('dev'))
 /**
  * Initial application setup
  * We need to use cors so we can connect to a localhost later
@@ -41,7 +45,7 @@ let currencies = [
  * @responds with the string 'Hello World!'
  */
 app.get('/', (request, response) => {
-  response.send('Hello World!')
+  response.send('Hello HabibA!')
 })
 
 /**
@@ -58,10 +62,17 @@ app.get('/api/currency/', (request, response) => {
  * @receives a get request to the URL: http://localhost:3001/api/currency/:id
  * @responds with returning specific data as a JSON
  */
-app.get('...', (request, response) => {
+app.get('/api/currency/:id', (request, response) => {
+  const moneyId = Number(request.params.id);
+  const currencyIndex = currencies.findIndex((c) => c.id === moneyId);
 
+  if (currencyIndex === -1) {
+    return response.status(404).json({ error: 'resource not found' });
+  }
 
-})
+  const foundCurrency = { ...currencies[currencyIndex] };
+  response.json(foundCurrency);
+});
 
 /**
  * TODO: POST Endpoint
@@ -69,10 +80,18 @@ app.get('...', (request, response) => {
  * with data object enclosed
  * @responds by returning the newly created resource
  */
-app.post('...', (request, response) => {
+app.post('/api/currency', (request, response) => {
+  const { currencyCode, country, conversionRate} = request.body;
+  if (!currencyCode || !country  || !conversionRate) {
+   return response.status(400).json( {error : 'content missing'} )
+  }
+  const add = {currencyCode, country, conversionRate}
+   currencies.push(add);  
+   console.log('added money: ', add );
+   response.status(201).json(add); 
+});
 
 
-})
 
 /**
  * TODO: PUT:id endpoint
@@ -81,21 +100,36 @@ app.post('...', (request, response) => {
  * Hint: updates the currency with the new conversion rate
  * @responds by returning the newly updated resource
  */
-app.put('...', (request, response) => {
-  
+
+app.put('/api/currency/:id/:newRate', (request, response) => {
+  const putMoney = parseInt(request.params.id);
+  const moneyRate = parseFloat(request.params.newRate);
+  const ratee = currencies.find((call) => call.id === putMoney);
+  if (!ratee){ 
+ return response.status(404).json({error : 'resource not found'})
+  }
+  ratee.conversionRate = moneyRate;
+  response.json(ratee); 
 })
+
+//middleware (unknownEndpoint)
+app.use ((request, response) => {
+  response.status(404).json({error: 'unknown endpoint'})
+});
 
 /**
  * TODO: DELETE:id Endpoint
  * @receives a delete request to the URL: http://localhost:3001/api/currency/:id,
  * @responds by returning a status code of 204
  */
-app.post('...', (request, response) => {
+app.delete('/api/currency/:id', (request, response) => {
+  const remove = parseInt (request.params.id);
+  currencies = currencies.filter((call) => call.id !== remove)
+  response.sendStatus(204); 
+ 
+ })
 
-
-})
-
-const PORT = 3001
+const PORT = 2005
 app.listen(PORT, () => {
   console.log(`Server running on port: ${PORT}`)
 })

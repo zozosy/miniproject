@@ -1,1 +1,28 @@
-GET http://localhost:3001/api/currency/
+GET http://localhost:2005/api/currency/
+
+###
+GET http://localhost:2005/api/currency/2
+
+### post:id
+POST http://localhost:2005/api/currency
+Content-Type: application/json
+
+{
+  "currencyCode": "Sy",
+  "country": "Syria",
+  "conversionRate": 2
+}
+
+### Put
+PUT http://localhost:2005/api/currency/1/3.0
+Content-Type: application/json
+
+{
+  "currencyCode": "Sy",
+  "country": "Syria",
+  "conversionRate": 3.0
+}
+
+### delete
+
+DELETE http://localhost:3001/api/currency/1
