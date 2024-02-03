@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+const { currencies } = require('../storage/currencies');
 /**
  * TESTING Endpoint (Completed)
  * @receives a get request to the URL: http://localhost:3001/
