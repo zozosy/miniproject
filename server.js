@@ -4,8 +4,10 @@ require('dotenv').config();
 const { middleware } = require('./utils/middleware');
 const morgan = require('morgan');
 const app = express() // Creates an express application in app
+const dataStorage = require('./storage/currencies')
 const expressRouter = require('./express-router/routecurrency');
 const countries = require('./express-router/countryrouter')
+const countrycurrency = require('./express-router/countrycurrency');
 const sequelize = require('./config/sequelize');
 
 
@@ -28,6 +30,7 @@ app.use((request, response, next) => {
 
 app.use('/', expressRouter);
 app.use('/', countries)
+app.use('/', countrycurrency)
 //middleware (unknownEndpoint)
 app.use ((request, response) => {
   response.status(404).json({error: 'unknown endpoint'})
@@ -35,12 +38,14 @@ app.use ((request, response) => {
 
 //await sequelize.sync({ force: true });
 //console.log("All models were synchronized successfully.");
-const PORT = 2005
 
-sequelize.sync ().then (() => {
-console.log("successfully connected")
-app.listen(PORT, () => {
-  console.log(`Server running on port: ${PORT}`)
+const PORT = 2005;
+sequelize.sync().then(() => {
+  console.log("connected to PG")
+  app.listen(PORT, () => {
+      console.log(`Server running on port: ${PORT}`)
+  })
 })
-}
-) 
+.catch((error) => {
+  console.error("syncing database error", error);
+})

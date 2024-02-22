@@ -16,8 +16,12 @@ const currency = require('../models/Currency');
    * @responds with returning the data as a JSON
    */
   router.get('/api/currency/', async (request, response) => {
-    const currencies = await currency.findAll();
-    response.json (currencies)
+    try {
+      const currencies = await currency.findAll();
+      response.json (currencies)
+    } catch (error) {
+      response.status(500).json({ error: error.message });
+  }
   })
   
   /**
@@ -44,14 +48,21 @@ const currency = require('../models/Currency');
    * @responds by returning the newly created resource
    */
   router.post('/api/currency', async (request, response) => {
-    const { currencyCode, country, conversionRate} = request.body;
-    if (!currencyCode || !country  || !conversionRate) {
-     return response.status(400).json( {error : 'content missing'} )
+    try {
+    const   { currencyCode, countryId, conversionRate } = request.body;
+    if (!currencyCode || !countryId || !conversionRate) {
+      return response.status(400).json({ error: 'content missing' });
     }
-    const add = {currencyCode, country, conversionRate}
-     const addcurrency = await currency.create(add);  
-     console.log('added money: ', add );
-     response.status(201).json(addcurrency); 
+    const addCurrency = await currency.create({
+      currencyCode,       
+      countryId, 
+      conversionRate});
+      response.status(201).json(addCurrency); 
+      console.log('New Currency Created:', addCurrency);
+  }
+    catch(error){
+      return response.status(201).json(error);
+    }
   });
   
   

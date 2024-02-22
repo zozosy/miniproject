@@ -8,8 +8,8 @@ POST http://localhost:2005/api/currency
 Content-Type: application/json
 
 {
-  "currencyCode": "Sy",
-  "country": "Syria",
+  "currencyCode": "SYP",
+  "countryId": 1,
   "conversionRate": 2
 }
 
@@ -26,3 +26,20 @@ Content-Type: application/json
 ### delete
 
 DELETE http://localhost:3001/api/currency/1
+
+## GET (countryroute)
+GET http://localhost:2005/api/country 
+
+### POST (countryroute)
+POST http://localhost:2005/api/country
+Content-Type: application/json
+
+{
+  "name" : "Syria"
+}
+
+### DELETE (countryroute)
+DELETE http://localhost:2005/api/country/2
+
+### GET (countrycurrency)
+GET http://localhost:2005/api/countrycurrency

@@ -22,14 +22,18 @@ const country = require('../models/Country');
    * @responds by returning the newly created resource
    */
   router.post('/api/country', async (request, response) => {
-    const { countryname} = request.body;
-    if (!countryname) {
-     return response.status(400).json( {error : 'content missing'} )
+    try {
+      const name  = request.body;
+      if (!name) {
+        return response.status(400).json({ error: 'content missing' });
+      }
+      const addCurrency = await country.create(
+        name );
+        return response.json(addCurrency);
     }
-    const add = {countryname}
-     const addcountry = await country.create(add);  
-     console.log('added country: ', add );
-     response.status(201).json(addcountry); 
+      catch(error){
+          return response.status(500).json({ error: 'Internal Server Error' })
+      }
   });
   
   
