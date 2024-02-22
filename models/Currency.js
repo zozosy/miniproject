@@ -17,7 +17,7 @@ const Country = require ('./Country')
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'Country',
+          model: Country,
           key: 'id'
         }
       },
