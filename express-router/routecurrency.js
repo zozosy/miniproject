@@ -87,7 +87,7 @@ const currency = require('../models/Currency');
     const moneyRate = parseFloat(request.params.newRate);
     const ratee = await currency.update({conversionRate : moneyRate}, {
       where:
-      {putMoney}
+      {id: putMoney}
     }
       )
   
@@ -110,11 +110,15 @@ await User.destroy({
  */
 router.delete('/api/currency/:id', async (request, response) => {
     const remove = parseInt (request.params.id);
-    currencies = await currency.destroy({
-      where: {remove}
+    result = await currency.destroy({
+      where: {id: remove}
     })
-    response.sendStatus(204); 
-   
+    if (result !== -1) {
+      response.sendStatus(204); 
+      
+    } else {
+      response.status(404).json({ error: 'resource not found' });
+    }
    })
 
    module.exports = router;
