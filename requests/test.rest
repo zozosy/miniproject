@@ -27,7 +27,7 @@ Content-Type: application/json
 
 DELETE http://localhost:3001/api/currency/1
 
-## GET (countryroute)
+### GET (countryroute)
 GET http://localhost:2005/api/country 
 
 ### POST (countryroute)
@@ -35,11 +35,11 @@ POST http://localhost:2005/api/country
 Content-Type: application/json
 
 {
-  "name" : "Syria"
+  "name" : "Lebanon"
 }
 
 ### DELETE (countryroute)
-DELETE http://localhost:2005/api/country/2
+DELETE http://localhost:2005/api/country/3
 
 ### GET (countrycurrency)
 GET http://localhost:2005/api/countrycurrency

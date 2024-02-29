@@ -51,7 +51,7 @@ await User.destroy({
 router.delete('/api/country/:id', async (request, response) => {
     const remove = parseInt (request.params.id);
     countries = await country.destroy({
-      where: {remove}
+      where: {id: remove}
     })
     response.sendStatus(204); 
    
